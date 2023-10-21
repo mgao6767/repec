@@ -7,21 +7,18 @@ This patch is not yet integrated into the main code.
 """
 
 # Load local packages
-import settings
-from misc import dbconnection, collect
-import redif
-from repec import ftp_get
+from . import settings
+from .misc import dbconnection, collect
+from . import redif
+from .repec import ftp_get
 
 
 @dbconnection(settings.database)
 def fetch_handles(conn):
     """Return a set of handle prefixes that miss journal names."""
-    sql = (
-        "SELECT handle FROM papers"
-        " WHERE template = 'article' AND journal IS NULL"
-    )
+    sql = "SELECT handle FROM papers" " WHERE template = 'article' AND journal IS NULL"
     handles = conn.execute(sql).fetchall()
-    return set(':'.join(h[0].split(':')[:3]) for h in handles)
+    return set(":".join(h[0].split(":")[:3]) for h in handles)
 
 
 @dbconnection(settings.database)
@@ -31,7 +28,7 @@ def fetch_files(conn, handles):
     c = conn.cursor()
     files = set()
     for handle in handles:
-        for file, in c.execute(sql, (handle, )):
+        for (file,) in c.execute(sql, (handle,)):
             files.add(file)
     return files
 
@@ -40,23 +37,23 @@ def collect_names(files):
     """Download files and collect handle -> name associations."""
     handles = {}
     for i, file in enumerate(files):
-        print(f'[{i+1}/{len(files)}] {file}...')
+        print(f"[{i+1}/{len(files)}] {file}...")
         try:
             rdf = redif.load(redif.decode(ftp_get(settings.repec_ftp + file)))
             for record in rdf:
                 record = collect(record)
-                if 'name' in record:
+                if "name" in record:
                     # Account for inconsistent capitalization across records
-                    handle = record['handle'][0].lower()
-                    newname = record['name'][0]
+                    handle = record["handle"][0].lower()
+                    newname = record["name"][0]
                     oldname = handles.setdefault(handle, newname)
                     if newname != oldname:
                         print(
                             f'Conflicting names: "{oldname}" vs. "{newname}"'
-                            f' in {handle}'
+                            f" in {handle}"
                         )
         except Exception:
-            print(f'Skipping {file} due to errors')
+            print(f"Skipping {file} due to errors")
     return handles
 
 
@@ -97,5 +94,5 @@ def main():
     update_names(names=names)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

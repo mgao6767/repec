@@ -10,11 +10,11 @@ from lxml import etree
 from html import unescape
 
 # Load local packages
-import settings
-from network import fetch
+from . import settings
+from .network import fetch
 
 # Define constants
-DBVERSION = '8'
+DBVERSION = "8"
 
 SQL = f"""
     CREATE TABLE repec (
@@ -92,20 +92,20 @@ SQL = f"""
 
 def jcode(item):
     """Get JEL code."""
-    e = item.xpath('code/text()')
+    e = item.xpath("code/text()")
     return e[0] if e else None
 
 
 def jdesc(item):
     """Get JEL description."""
-    return unescape(item.xpath('description/text()')[0])
+    return unescape(item.xpath("description/text()")[0])
 
 
 def import_level(c, element):
     """Recursively import JEL hierarchy."""
-    sql = 'INSERT INTO jel (code, parent, description) VALUES (?, ?, ?)'
+    sql = "INSERT INTO jel (code, parent, description) VALUES (?, ?, ?)"
     parent = jcode(element)
-    items = element.xpath('classification')
+    items = element.xpath("classification")
     rows = [(jcode(i), parent, jdesc(i)) for i in items]
     c.executemany(sql, rows)
     for item in items:
@@ -125,7 +125,7 @@ def populate_jel(conn):
 def prepare(path):
     """Prepare a new SQLite database."""
     if os.path.exists(path):
-        raise RuntimeError('Database already exists')
+        raise RuntimeError("Database already exists")
     conn = sqlite3.connect(path)
     conn.executescript(SQL)
     populate_jel(conn)
@@ -135,6 +135,6 @@ def check_version():
     """Verify database version."""
     sql = "SELECT value FROM meta WHERE parameter = 'version'"
     conn = sqlite3.connect(settings.database)
-    version, = conn.execute(sql).fetchone()
+    (version,) = conn.execute(sql).fetchone()
     if version != DBVERSION:
-        raise RuntimeError('Incompatible database version')
+        raise RuntimeError("Incompatible database version")

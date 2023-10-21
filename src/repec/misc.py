@@ -9,7 +9,7 @@ from functools import wraps
 import sqlite3
 
 # Load local packages
-import settings
+from . import settings
 
 
 def iserror(err):
@@ -19,11 +19,13 @@ def iserror(err):
 
 def silent(func):
     """Catch errors and return them regularly."""
+
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as err:
             return err
+
     return wrapper
 
 
@@ -31,7 +33,7 @@ def meter(it, it_len):
     """Print progress information."""
     for i, el in enumerate(it):
         if settings.verbosity == 3:
-            print('[{}/{}]'.format(i + 1, it_len), end='\r')
+            print("[{}/{}]".format(i + 1, it_len), end="\r")
         yield el
 
 
@@ -52,6 +54,7 @@ def collect(lst):
 
 def dbconnection(database):
     """Establish a database connection."""
+
     def decorator(func):
         @wraps(func)
         def wrapper(**kwargs):
@@ -65,5 +68,7 @@ def dbconnection(database):
             finally:
                 conn.close()
             return rslt
+
         return wrapper
+
     return decorator
