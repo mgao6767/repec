@@ -12,6 +12,7 @@ from . import database
 from . import repec
 from . import remotes
 from . import papers
+from . import export_bib
 
 
 def init(args):
@@ -44,6 +45,14 @@ def update(args):
         remotes.update()
     if args.papers:
         papers.update()
+
+
+def export(args):
+    settings.database = args.database
+    settings.export_bib = args.out_bib
+
+    if args.handle:
+        export_bib.export(args.handle, args.out_bib)
 
 
 def main():
@@ -146,6 +155,28 @@ def main():
         help="Decrease verbosity level (can be given multiple times)",
     )
 
+    p_export = commands.add_parser(
+        "export-bib",
+        help="Export bibliography",
+        description="Export bibliography",
+    )
+    p_export.set_defaults(func=export)
+    p_export.add_argument(
+        "--database",
+        default=settings.database,
+        help=f"SQLite database location (default: {settings.database})",
+    )
+    p_export.add_argument(
+        "--handle",
+        type=str,
+        default="",
+        help="Export bibliography for a given handle, e.g. repec:bla:jfinan",
+    )
+    p_export.add_argument(
+        "--out-bib",
+        default=settings.export_bib,
+        help=f"Export bibliography location (default: {settings.export_bib})",
+    )
     # Process command line arguments and dispatch on subcommand
     args = parser.parse_args()
     args.func(args)

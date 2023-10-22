@@ -31,6 +31,12 @@ Download papers.
 repec update --papers
 ```
 
+Export bibliography (for selected journals).
+
+```bash
+repec export-bib --handle repec:eee:jfinec
+```
+
 ## Database
 
 The SQLite database will contain the following tables.
