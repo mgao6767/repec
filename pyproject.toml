@@ -1,6 +1,6 @@
 [project]
 name = "repec"
-version = "0.0.1"
+version = "0.0.1rc2"
 authors = [
   { name = "Andrei Dubovik", email = "chat@dubovik.eu" },
   { name = "Mingze Gao", email = "adrian.gao@outlook.com" },
