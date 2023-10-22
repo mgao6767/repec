@@ -14,7 +14,7 @@ from . import settings
 from .network import fetch
 
 # Define constants
-DBVERSION = "8"
+DBVERSION = "9"
 
 SQL = f"""
     CREATE TABLE repec (
@@ -37,6 +37,8 @@ SQL = f"""
     );
     CREATE TABLE remotes (
         url text PRIMARY KEY,
+        file text,
+        handle text,
         status integer DEFAULT 1,
         error text,
         replaced_at text DEFAULT CURRENT_TIMESTAMP

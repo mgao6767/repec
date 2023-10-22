@@ -84,12 +84,18 @@ def update_listings(conn, lock, status=1):
     print(f"{sum(status)} out of {len(urls)} records updated successfully")
 
 
-def update():
+def update(handle: str = ""):
     """Update remote listings (wrapper)."""
     conn = sqlite3.connect(settings.database, check_same_thread=False)
     lock = threading.Lock()
     try:
-        update_listings(conn, lock)
+        if len(handle):
+            c = conn.cursor()
+            c.execute("select url from series where lower(handle)=lower(?);", (handle,))
+            u = c.fetchone()[0]
+            update_listings_1(conn, lock, u)
+        else:
+            update_listings(conn, lock)
     except BaseException:
         conn.rollback()
         raise

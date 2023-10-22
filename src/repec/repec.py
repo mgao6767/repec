@@ -125,8 +125,8 @@ def update_remotes(conn, status=1):
     c.executemany(sql, series)
 
     # Remotes
-    remotes = list(set((s[0],) for s in series if s[0]))
-    c.executemany("REPLACE INTO remotes (url) VALUES (?)", remotes)
+    remotes = list(set((s[0], s[-2], s[-1]) for s in series if s[0]))
+    c.executemany("REPLACE INTO remotes (url,file,handle) VALUES (?,?,?)", remotes)
     c.close()
 
 

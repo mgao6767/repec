@@ -31,11 +31,15 @@ def update(args):
 
     if not args.repec and not args.listings and not args.papers:
         args.repec = args.listings = args.papers = True
+    if len(args.listings_of_handle):
+        args.repec = args.listings = args.papers = False
 
     database.check_version()  # Abort on incompatible versions
 
     if args.repec:
         repec.update()
+    if args.listings_of_handle:
+        remotes.update(args.listings_of_handle)
     if args.listings:
         remotes.update()
     if args.papers:
@@ -86,6 +90,12 @@ def main():
         "--listings",
         action="store_true",
         help="Download website listings",
+    )
+    p_update.add_argument(
+        "--listings-of-handle",
+        type=str,
+        default="",
+        help="Download website listings for a given handle",
     )
     p_update.add_argument(
         "--papers",
