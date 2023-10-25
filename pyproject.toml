@@ -1,6 +1,6 @@
 [project]
 name = "repec"
-version = "0.0.1rc2"
+version = "0.0.1rc3"
 authors = [
   { name = "Andrei Dubovik", email = "chat@dubovik.eu" },
   { name = "Mingze Gao", email = "adrian.gao@outlook.com" },
@@ -18,7 +18,7 @@ classifiers = [
   "Intended Audience :: Science/Research",
 ]
 license = { text = "GPLv3" }
-dependencies = ["requests", "lxml", "cld2-cffi", "html5lib"]
+dependencies = ["requests", "lxml", "cld2-cffi", "html5lib", "nameparser"]
 
 
 [project.urls]
