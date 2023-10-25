@@ -101,6 +101,8 @@ def parse_redif_rfs(redif_data: bytes, f):
         match rec[0], "".join(rec[1:]):
             case "template-type", _:
                 pass
+            # TODO: RFS lists the Editor as an "author"...
+            # I have no idea how to clean it.
             case "author-name", author:
                 name = nameparser.HumanName(author)
                 name = f"{name.last}, {name.first} {name.middle}"
