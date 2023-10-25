@@ -7,7 +7,7 @@ authors = [
 ]
 description = "Download RePEc database"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
   "Operating System :: OS Independent",
   "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
@@ -18,7 +18,14 @@ classifiers = [
   "Intended Audience :: Science/Research",
 ]
 license = { text = "GPLv3" }
-dependencies = ["requests", "lxml", "cld2-cffi", "html5lib", "nameparser"]
+dependencies = [
+  "requests",
+  "lxml",
+  "cld2-cffi",
+  "html5lib",
+  "nameparser",
+  "titlecase",
+]
 
 
 [project.urls]
